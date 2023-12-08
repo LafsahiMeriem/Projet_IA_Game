@@ -50,19 +50,18 @@ function draw() {
   case "snake":
     vehicules.forEach((vehicle, index) => {
       let forceArrive;
+      vehicle.poidsSeparation = 0;
 
       if (index == 0) {
         // C'est le 1er véhicule, il suit la cible/souris
-        forceArrive = vehicle.arrive(target);
+        forceArrive = vehicle.applyBehaviors(target, obstacles, vehicules, 0);
       } else{
         // les véhicules suivants suivent le véhicule précédent
         let vehiculePrecedent = vehicules[index - 1];
 
-        forceArrive = vehicle.arrive(vehiculePrecedent.pos, 40);
-
+        forceArrive = vehicle.applyBehaviors(vehiculePrecedent.pos, obstacles, vehicules, 40);
       }
-      // On applique la force au véhicule
-      vehicle.applyForce(forceArrive);
+      
 
       vehicle.update();
       vehicle.show();
@@ -90,7 +89,7 @@ function keyPressed() {
   if (key == "d") {
     Vehicle.debug = !Vehicle.debug;
   }
-  if(key == "s"){
+  if(key == "l"){
      demo = "snake";
   }
 

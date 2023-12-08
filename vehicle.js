@@ -46,24 +46,27 @@ class Vehicle {
     this.pathMaxLength = 30;
     this.rayonZoneDeFreinage = 100;
 
+    //pour comportement separation
+    this.poidsSeparation = 0.5;
+
   }
 
   // on fait une méthode applyBehaviors qui applique les comportements
   // seek et avoid
-  applyBehaviors(target, obstacles, vehicules) {
+  applyBehaviors(target, obstacles, vehicules, distance) {
 
-    let seekForce = this.arrive(target);
+    let seekForce = this.arrive(target, distance);
     let avoidForceObstacles = this.avoid(obstacles);
     //let avoidForceVehicules = this.avoidVehicules(vehicules);
     let separationForce = this.separate(vehicules);
-
+    
     seekForce.mult(0.2);
-    avoidForceObstacles.mult(0.9);
+    avoidForceObstacles.mult(0.5);
     //avoidForceVehicules.mult(0);
-    separationForce.mult(0.9);
+    separationForce.mult(this.poidsSeparation);
 
     this.applyForce(seekForce);
-    this.applyForce(avoidForceObstacles);
+this.applyForce(avoidForceObstacles);
     //this.applyForce(avoidForceVehicules);
     this.applyForce(separationForce);
   }
@@ -342,7 +345,7 @@ class Vehicle {
 
   
   separate(boids) {
-    let desiredseparation = this.r * 2;
+    let desiredseparation = this.r;
     let steer = createVector(0, 0, 0);
     let count = 0;
     // On examine les autres boids pour voir s'ils sont trop près
