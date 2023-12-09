@@ -1,4 +1,4 @@
-//vehicule
+
 /*
   Calcule la projection orthogonale du point a sur le vecteur b
   a et b sont des vecteurs calculés comme ceci :
@@ -53,9 +53,14 @@
       
       this.health = 1;
       this.dna = [];
+      
+      
   
   
     }
+    
+  
+
   
     // Exerce une force renvoyant vers le centre du canvas si le véhicule s'approche
     // des bords du canvas
@@ -88,7 +93,7 @@
     // seek et avoid
     applyBehaviors(target, obstacles, vehicules, distance) {
   
-      let seekForce = this.arrive(target, distance);
+      let seekForce = this.seek(target, false,  distance);
       let avoidForceObstacles = this.avoid(obstacles);
       //let avoidForceVehicules = this.avoidVehicules(vehicules);
       let separationForce = this.separate(vehicules);
@@ -102,6 +107,18 @@
       this.applyForce(avoidForceObstacles);
       //this.applyForce(avoidForceVehicules);
       this.applyForce(separationForce);
+
+        // Ajout de la force d'arrêt si le véhicule est à l'intérieur du cercle blanc
+        let distanceToTarget = dist(this.pos.x, this.pos.y, target.x, target.y);
+        let radiusOfStop = 50; // Ajustez cette valeur selon vos besoins
+
+     if (distanceToTarget < radiusOfStop) {
+        // Force d'arrêt
+    let stopForce = this.vel.copy();
+    stopForce.mult(-1);
+    stopForce.limit(this.maxForce);
+    this.applyForce(stopForce);
+    }
     }
   
     // Méthode d'évitement d'obstacle, implémente le comportement avoid
@@ -118,12 +135,12 @@
         // on le dessine avec ma méthode this.drawVector(pos vecteur, color)
         this.drawVector(this.pos, ahead, color(255, 0, 0));
         // On dessine ce point au bout du vecteur ahead pour debugger
-        fill("lightgreen");
+        fill(255, 0, 255);
         noStroke();
         circle(pointAuBoutDeAhead.x, pointAuBoutDeAhead.y, this.rayonZoneDeFreinage);
   
         // On dessine ce point au bout du vecteur ahead pour debugger
-        fill("lightgreen");
+        fill(255, 0, 255);
         noStroke();
         circle(pointAuBoutDeAhead.x, pointAuBoutDeAhead.y, this.rayonZoneDeFreinage);
       }
@@ -235,12 +252,12 @@
         // on le dessine avec ma méthode this.drawVector(pos vecteur, color)
         this.drawVector(this.pos, ahead, color(255, 0, 0));
         // On dessine ce point au bout du vecteur ahead pour debugger
-        fill("lightgreen");
+        fill(255, 0, 255) // Magenta (rouge + bleu)
         noStroke();
         circle(pointAuBoutDeAhead.x, pointAuBoutDeAhead.y, 10);
   
         // On dessine ce point au bout du vecteur ahead pour debugger
-        fill("lightgreen");
+        fill(255, 0, 255) // Magenta (rouge + bleu);
         noStroke();
         circle(pointAuBoutDeAhead.x, pointAuBoutDeAhead.y, 10);
       }
@@ -254,7 +271,7 @@
         // on le dessine avec ma méthode this.drawVector(pos vecteur, color)
         this.drawVector(this.pos, ahead2, color("lightblue"));
         // On dessine ce point au bout du vecteur ahead pour debugger
-        fill("orange");
+        fill(0, 0, 255);
         noStroke();
         circle(pointAuBoutDeAhead2.x, pointAuBoutDeAhead2.y, 10);
       }
@@ -316,7 +333,7 @@
   
         // on le dessine en jaune pour vérifier qu'il est ok (dans le bon sens etc)
         if(Vehicle.debug)
-          this.drawVector(obstacleLePlusProche.pos, force, "yellow");
+          this.drawVector(obstacleLePlusProche.pos, force, "blue");
   
         // Dessous c'est l'ETAPE 2 : le pilotage (comment on se dirige vers la cible)
         // on limite ce vecteur à la longueur maxSpeed
@@ -481,6 +498,13 @@
   
       // durée de vie
       this.dureeDeVie -= 0.01;
+
+
+    // si le tableau a plus de 50 éléments, on vire le plus ancien
+    if (this.path.length > this.nbMaxPointsChemin) {
+      this.path.shift();
+    }
+
     }
   
     ajoutePosAuPath() {
@@ -600,7 +624,7 @@
       push();
       stroke(255);
       strokeWeight(2);
-      fill("#F063A4");
+      ill("#00FF00");
       push();
       translate(this.pos.x, this.pos.y);
       circle(0, 0, this.r * 2);

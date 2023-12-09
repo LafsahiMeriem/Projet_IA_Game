@@ -6,7 +6,8 @@ let pursuer1, pursuer2;
   let vehicle;
   let cibles = [];
   let demo = "snake";
-  
+
+ 
   
   let imgVaisseau;
   
@@ -20,35 +21,39 @@ let pursuer1, pursuer2;
     createCanvas(windowWidth, windowHeight);
     pursuer1 = new Vehicle(100, 100, imgVaisseau);
     pursuer2 = new Vehicle(random(width), random(height), imgVaisseau);
-  
-  
+   
     vehicules.push(pursuer1);
     vehicules.push(pursuer2);
    
-    // On cree un obstace au milieu de l'écran
-    // un cercle de rayon 100px
-    // TODO
-    obstacles.push(new Obstacle(width / 2, height / 2, 100));
   }
+  
   
   function draw() {
     // changer le dernier param (< 100) pour effets de trainée
     background(0, 0, 0, 100);
   
     target = createVector(mouseX, mouseY);
-  
+    
+
     // Dessin de la cible qui suit la souris
     // Dessine un cercle de rayon 32px à la position de la souris
     fill(255, 0, 0);
     noStroke();
     circle(target.x, target.y, 32);
    
+    // Dessin du cercle blanc qui entoure la souris
+    fill(255);
+    noFill();
+    stroke(255);
+    circle(target.x, target.y, 100);
   
     // dessin des obstacles
     // TODO
     obstacles.forEach(o => {
       o.show();
     })
+
+  
 
 
     switch (demo) {
@@ -92,11 +97,15 @@ let pursuer1, pursuer2;
     if (key == "v") {
       vehicules.push(new Vehicle(random(width), random(height), imgVaisseau));
     }
-    if (key == "d") {
-      Vehicle.debug = !Vehicle.debug;
+    // quand on vas cliquer sur la lettre a il vas debuger 
+    if (key == "a") {
+      Vehicle.debug = !Vehicle.debug; 
     }
     if(key == "l"){
        demo = "snake";
+    }
+    if (key == "d") {
+      Vehicle.debug = !Vehicle.debug;
     }
   
     //quand on clique sur la lettre f il nous ajoute plusieur vehicules.
@@ -109,7 +118,6 @@ let pursuer1, pursuer2;
         v.color = "purple";
         vehicules.push(v);
       }
-    }
+    }}
+   
   
-  
-  }
