@@ -101,6 +101,21 @@
         this.applyForce(steer);
       }
     }
+
+    wander() {
+      let wanderR = 25; // rayon de la "circonférence" du wander
+      let wanderD = 80; // distance à la "circonférence" du wander
+      let change = 0.3;
+    
+      let circlePos = createVector(width / 2, height / 2);
+      circlePos.add(this.vel.copy().normalize().mult(wanderD));
+
+      let displacement = createVector(0, -1).mult(wanderR);
+      circlePos.add(displacement);
+    
+      let wanderForce = circlePos.sub(this.pos);
+      this.acc.add(wanderForce);
+    }
     // on fait une méthode applyBehaviors qui applique les comportements
     // seek et avoid
     applyBehaviors(target, obstacles, vehicules, distance) {
@@ -133,6 +148,10 @@
             stopForce.limit(this.maxForce);
            this.applyForce(stopForce);
     }
+    if (wanderEnabled) {
+      this.wander();
+    }
+  
     }
 
     align(leader) {

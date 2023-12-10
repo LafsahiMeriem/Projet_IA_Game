@@ -31,9 +31,9 @@ let pursuer1, pursuer2;
   maxForceSlider = createSlider(0.1, 2, 0.7, 0.1); // Adjust the range and default value as needed
   distanceAheadSlider = createSlider(10, 100, 30, 1); // Adjust the range and default value as needed
 // Position the sliders on the canvas
-maxSpeedSlider.position(10, height + 10);
-maxForceSlider.position(10, height + 40);
-distanceAheadSlider.position(10, height + 70);
+  maxSpeedSlider.position(10, height + 10);
+  maxForceSlider.position(10, height + 40);
+  distanceAheadSlider.position(10, height + 70);
  
 
   }
@@ -68,6 +68,7 @@ pursuer1.distanceAhead = distanceAheadSlider.value();
     obstacles.forEach(o => {
       o.show();
     })
+
 
       // Mettez à jour la position de la souris rouge
   sourisRougePosition = createVector(mouseX, mouseY);
@@ -118,7 +119,8 @@ pursuer1.distanceAhead = distanceAheadSlider.value();
     obstacles.push(new Obstacle(mouseX, mouseY, random(30, 100)));
   
   }
-  
+  let wanderEnabled = false;
+
   
   
   
@@ -136,6 +138,9 @@ pursuer1.distanceAhead = distanceAheadSlider.value();
     }
     if (key == "d") {
       Vehicle.debug = !Vehicle.debug;
+    }
+    if (key === 'w' || key === 'W') {
+      wanderEnabled = !wanderEnabled;
     }
   
     //quand on clique sur la lettre f il nous ajoute plusieur vehicules.
