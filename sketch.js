@@ -77,6 +77,11 @@ pursuer1.distanceAhead = distanceAheadSlider.value();
   vehicules[0].drawMouse(sourisRougePosition);
   
 
+  for (let i = 0; i < vehicules.length; i++) {
+    vehicules[i].edges();
+    vehicules[i].update();
+    vehicules[i].show();
+  }
 
     switch (demo) {
 

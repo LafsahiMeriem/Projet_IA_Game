@@ -654,18 +654,10 @@
       pop();
     }
   
-    // que fait cette méthode ?
     edges() {
-      if (this.pos.x > width + this.r) {
-        this.pos.x = -this.r;
-      } else if (this.pos.x < -this.r) {
-        this.pos.x = width + this.r;
-      }
-      if (this.pos.y > height + this.r) {
-        this.pos.y = -this.r;
-      } else if (this.pos.y < -this.r) {
-        this.pos.y = height + this.r;
-      }
+      const buffer = this.r; // Pour éviter que le véhicule ne "rebondisse" à la position limite
+      this.pos.x = constrain(this.pos.x, buffer, width - buffer);
+      this.pos.y = constrain(this.pos.y, buffer, height - buffer);
     }
   }
   
