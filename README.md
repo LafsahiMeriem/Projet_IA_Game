@@ -1,4 +1,5 @@
    # Rapport du Mini-projet.
+  __Meriem Lafsahi 5IIR M2 IA2 Casablanca__
    
    # Idée générale sur le jeux.
    Notre mini-projet est sous forme d'une jeux avec des mouvements spécifique, ce jeux est réalisé par javaSript native. Ce projet est encadré par monsieur Michel Buffa le Professeur 
