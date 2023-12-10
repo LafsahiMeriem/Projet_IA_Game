@@ -81,16 +81,16 @@
   
       let desired = null;
   
-      if (this.position.x < d) {
-        desired = createVector(this.maxspeed, this.velocity.y);
-      } else if (this.position.x > width - d) {
-        desired = createVector(-this.maxspeed, this.velocity.y);
+      if (this.pos.x < d) {
+        desired = createVector(this.maxspeed, this.vel.y);
+      } else if (this.pos.x > width - d) {
+        desired = createVector(-this.maxspeed, this.vel.y);
       }
   
-      if (this.position.y < d) {
-        desired = createVector(this.velocity.x, this.maxspeed);
-      } else if (this.position.y > height - d) {
-        desired = createVector(this.velocity.x, -this.maxspeed);
+      if (this.pos.y < d) {
+        desired = createVector(this.vel.x, this.maxspeed);
+      } else if (this.pos.y > height - d) {
+        desired = createVector(this.vel.x, -this.maxspeed);
       }
   
       if (desired !== null) {
@@ -134,6 +134,29 @@
            this.applyForce(stopForce);
     }
     }
+
+    align(leader) {
+      return this.seek(leader.pos);
+    }
+
+    follow(previousVehicle) {
+    let target = createVector(previousVehicle.pos.x, previousVehicle.pos.y);
+    let desiredSeparation = 30;
+    let offset = p5.Vector.sub(target, this.pos);
+    let distance = offset.mag();
+
+    if (distance < desiredSeparation) {
+      offset.setMag(map(distance, 0, desiredSeparation, 0, this.maxSpeed));
+      offset.mult(-1);
+      let steer = p5.Vector.sub(offset, this.vel);
+      steer.limit(this.maxForce);
+      return steer;
+    } else {
+      return this.arrive(target);
+    }
+  }
+
+
   
     // Méthode d'évitement d'obstacle, implémente le comportement avoid
     // renvoie une force (un vecteur) pour éviter l'obstacle
