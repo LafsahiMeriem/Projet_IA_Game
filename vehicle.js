@@ -127,7 +127,11 @@
         // Ajout de la force d'arrêt si le véhicule est à l'intérieur du cercle blanc
       let distanceToTarget = dist(this.pos.x, this.pos.y, target.x, target.y);
       let radiusOfStop = 50; // Ajustez cette valeur selon vos besoins
-
+     
+      let arriveForce = this.arrive(target, distance);
+      arriveForce.mult(0.2); // Ajustez le coefficient selon vos besoins
+      this.applyForce(arriveForce);
+      
       seekForce.mult(0.2);
       avoidForceObstacles.mult(0.5);
       //avoidForceVehicules.mult(0);
@@ -166,7 +170,7 @@
 
     if (distance < desiredSeparation) {
       offset.setMag(map(distance, 0, desiredSeparation, 0, this.maxSpeed));
-      offset.mult(-1);
+      offset.mult(-1);// Invert the offset to follow behind
       let steer = p5.Vector.sub(offset, this.vel);
       steer.limit(this.maxForce);
       return steer;
