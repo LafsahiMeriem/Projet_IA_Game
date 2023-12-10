@@ -6,8 +6,8 @@ let pursuer1, pursuer2;
   let vehicle;
   let cibles = [];
   let demo = "snake";
-
- 
+  
+  let sourisRougePosition;
   
   let imgVaisseau;
   
@@ -25,6 +25,17 @@ let pursuer1, pursuer2;
     vehicules.push(pursuer1);
     vehicules.push(pursuer2);
    
+    sourisRougePosition = createVector(mouseX, mouseY);
+  // Create sliders
+  maxSpeedSlider = createSlider(1, 10, 4, 0.1); // Adjust the range and default value as needed
+  maxForceSlider = createSlider(0.1, 2, 0.7, 0.1); // Adjust the range and default value as needed
+  distanceAheadSlider = createSlider(10, 100, 30, 1); // Adjust the range and default value as needed
+// Position the sliders on the canvas
+maxSpeedSlider.position(10, height + 10);
+maxForceSlider.position(10, height + 40);
+distanceAheadSlider.position(10, height + 70);
+ 
+
   }
   
   
@@ -33,6 +44,11 @@ let pursuer1, pursuer2;
     background(0, 0, 0, 100);
   
     target = createVector(mouseX, mouseY);
+
+// Update parameters based on slider values
+pursuer1.maxSpeed = maxSpeedSlider.value();
+pursuer1.maxForce = maxForceSlider.value();
+pursuer1.distanceAhead = distanceAheadSlider.value();
     
 
     // Dessin de la cible qui suit la souris
@@ -53,11 +69,25 @@ let pursuer1, pursuer2;
       o.show();
     })
 
+      // Mettez à jour la position de la souris rouge
+  sourisRougePosition = createVector(mouseX, mouseY);
+
+  // Dessinez la petite souris verte sur le premier véhicule
+  vehicules[0].drawMouse(sourisRougePosition);
   
 
 
     switch (demo) {
-      
+
+ case "random":
+      // Afficher et mettre à jour les véhicules en mode aléatoire
+      vehicules.forEach(vehicle => {
+        let forceArrive = vehicle.applyBehaviors(target, obstacles, vehicules, 0);
+  vehicle.update();
+        vehicle.show();
+      });
+      break;
+
     case "snake":
       vehicules.forEach((vehicle, index) => {
         let forceArrive;

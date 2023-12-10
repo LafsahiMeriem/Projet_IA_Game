@@ -1,3 +1,128 @@
+//sketch
+let pursuer1, pursuer2;
+  let target;
+  let obstacles = [];
+  let vehicules = [];
+  let vehicle;
+  let cibles = [];
+  let demo = "snake";
+
+ 
+  
+  let imgVaisseau;
+  
+  function preload() {
+    console.log("preload")
+    imgVaisseau = loadImage('assets/images/vaisseau.png');
+  }
+  
+  function setup() {
+    console.log("setup")
+    createCanvas(windowWidth, windowHeight);
+    pursuer1 = new Vehicle(100, 100, imgVaisseau);
+    pursuer2 = new Vehicle(random(width), random(height), imgVaisseau);
+   
+    vehicules.push(pursuer1);
+    vehicules.push(pursuer2);
+   
+  }
+  
+  
+  function draw() {
+    // changer le dernier param (< 100) pour effets de trainée
+    background(0, 0, 0, 100);
+  
+    target = createVector(mouseX, mouseY);
+    
+
+    // Dessin de la cible qui suit la souris
+    // Dessine un cercle de rayon 32px à la position de la souris
+    fill(255, 0, 0);
+    noStroke();
+    circle(target.x, target.y, 32);
+   
+    // Dessin du cercle blanc qui entoure la souris
+    fill(255);
+    noFill();
+    stroke(255);
+    circle(target.x, target.y, 100);
+  
+    // dessin des obstacles
+    // TODO
+    obstacles.forEach(o => {
+      o.show();
+    })
+
+  
+
+
+    switch (demo) {
+      
+    case "snake":
+      vehicules.forEach((vehicle, index) => {
+        let forceArrive;
+        vehicle.poidsSeparation = 0;
+  
+        if (index == 0) {
+          // C'est le 1er véhicule, il suit la cible/souris
+          forceArrive = vehicle.applyBehaviors(target, obstacles, vehicules, 0);
+        } else{
+          // les véhicules suivants suivent le véhicule précédent
+          let vehiculePrecedent = vehicules[index - 1];
+  
+          forceArrive = vehicle.applyBehaviors(vehiculePrecedent.pos, obstacles, vehicules, 40);
+        }
+        
+  
+        vehicle.update();
+        vehicle.show();
+      });
+      break;
+  
+    }
+  
+   
+  }
+  function mousePressed() {
+    // TODO : ajouter un obstacle de taille aléatoire à la position de la souris
+    obstacles.push(new Obstacle(mouseX, mouseY, random(30, 100)));
+  
+  }
+  
+  
+  
+  
+  function keyPressed() {
+    // quand on clique sur la lettre v il nous ajoute une seule vehicule.
+    if (key == "v") {
+      vehicules.push(new Vehicle(random(width), random(height), imgVaisseau));
+    }
+    // quand on vas cliquer sur la lettre a il vas debuger 
+    if (key == "a") {
+      Vehicle.debug = !Vehicle.debug; 
+    }
+    if(key == "l"){
+       demo = "snake";
+    }
+    if (key == "d") {
+      Vehicle.debug = !Vehicle.debug;
+    }
+  
+    //quand on clique sur la lettre f il nous ajoute plusieur vehicules.
+    if (key == "f") {
+      // Je cree 100 vehicules qui partent du bord gauche de l'écran
+      // et qui vont vers la cible/souris
+      for (let i = 0; i < 10; i++) {
+        let v = new Vehicle(random(10, 20), random(height/2 -10,height/2 +10 ), imgVaisseau)
+        v.maxSpeed = 10;
+        v.color = "purple";
+        vehicules.push(v);
+      }
+    }}
+   
+  
+
+    //vehicule
 
 /*
   Calcule la projection orthogonale du point a sur le vecteur b
@@ -54,7 +179,6 @@
       this.health = 1;
       this.dna = [];
       
-
       
   
   
@@ -62,18 +186,7 @@
     
   
 
-   drawMouse(mousePos) {
-    push();
-    fill("green");  // Couleur verte
-    noStroke();
-    ellipse(this.pos.x, this.pos.y, 20, 20);  // Dessiner la souris verte
-    stroke("black");  // Couleur noire pour les yeux
-    strokeWeight(2);
-    point(this.pos.x - 5, this.pos.y - 5);  // Oeil gauche
-    point(this.pos.x + 5, this.pos.y - 5);  // Oeil droit
-    line(this.pos.x - 5, this.pos.y + 5, this.pos.x + 5, this.pos.y + 5);  // Bouche
-    pop();
-  }
+  
     // Exerce une force renvoyant vers le centre du canvas si le véhicule s'approche
     // des bords du canvas
     boundaries() {
@@ -109,10 +222,7 @@
       let avoidForceObstacles = this.avoid(obstacles);
       //let avoidForceVehicules = this.avoidVehicules(vehicules);
       let separationForce = this.separate(vehicules);
-        // Ajout de la force d'arrêt si le véhicule est à l'intérieur du cercle blanc
-      let distanceToTarget = dist(this.pos.x, this.pos.y, target.x, target.y);
-      let radiusOfStop = 50; // Ajustez cette valeur selon vos besoins
-
+      
       seekForce.mult(0.2);
       avoidForceObstacles.mult(0.5);
       //avoidForceVehicules.mult(0);
@@ -123,15 +233,16 @@
       //this.applyForce(avoidForceVehicules);
       this.applyForce(separationForce);
 
-      distanceToTarget = dist(this.pos.x, this.pos.y, target.x, target.y);
-      radiusOfStop = 50; // Ajustez cette valeur selon vos besoins
-    
-      if (distanceToTarget < radiusOfStop) {
+        // Ajout de la force d'arrêt si le véhicule est à l'intérieur du cercle blanc
+        let distanceToTarget = dist(this.pos.x, this.pos.y, target.x, target.y);
+        let radiusOfStop = 50; // Ajustez cette valeur selon vos besoins
+
+     if (distanceToTarget < radiusOfStop) {
         // Force d'arrêt
-           let stopForce = this.vel.copy();
-           stopForce.mult(-1);
-            stopForce.limit(this.maxForce);
-           this.applyForce(stopForce);
+    let stopForce = this.vel.copy();
+    stopForce.mult(-1);
+    stopForce.limit(this.maxForce);
+    this.applyForce(stopForce);
     }
     }
   
@@ -635,18 +746,14 @@
     }
   
     show() {
-  push();
-  stroke(255);
-  strokeWeight(2);
-  fill("#00FF00"); // Corrected line
-  translate(this.pos.x, this.pos.y);
-  circle(0, 0, this.r * 2);
-
-  // Draw a line representing the "souris" (mouse) on the head of the vehicle
-  let mousePos = createVector(0, -this.r * 2);
-  stroke("#00FF00");
-  line(0, 0, mousePos.x, mousePos.y);
-
-  pop();
-}
+      push();
+      stroke(255);
+      strokeWeight(2);
+      ill("#00FF00");
+      push();
+      translate(this.pos.x, this.pos.y);
+      circle(0, 0, this.r * 2);
+      pop();
+      pop();
+    }
   }
