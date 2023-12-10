@@ -7,6 +7,7 @@
    # Ce que j'ai réalisé.
    Dans cette jeux la j'ai fait un canvas qui contient une souris rouge et je l'ai entouré par un cadre de cercle blanc, on a les vehicules qui suivre un leader aussi un vehicule on mode snake. On cliquant sur la lettre "v" on peux ajouter une seule vehicule, on cliquant sur la lettre "f" on peux ajouter plusieur vehicules, on cliquant sur la lettre "d" on fait un debug (concerant la methode debug j'ai gardé celle que vous avez fait avec nous durant les exercices), on cliquant sur la lettre "w" les vehicules fait un comportement de mouvement aléatoire. Aussi j'ai forté au vehicules de ne pas sortir du canvas elles renstent à l'intérieur. j'ai fait aussi un évitement d'obstacles , j'ai ajouté 3 curseurs de réglage des paramétres, un pour la vitesse des vehicules "maxSpeedSlider" , un pour la distance entre les vehicules "distanceAheadSlider", et un pour "maxForceSlider".
 
+  # Explication concernent vehicle.js
    # Fonction findProjection(pos, a, b)
   Cette fonction calcule la projection orthogonale du vecteur a sur le vecteur b. Elle utilise la bibliothèque p5.js pour manipuler des vecteurs.
 
@@ -58,7 +59,45 @@ __drawVector(pos, v, color):__ Dessine un vecteur à partir de la position spéc
   
   # Classe Target
  Cette classe hérite de la classe Vehicle et représente une cible mobile.
- show(): Dessine la cible.
+ __show():__ Dessine la cible.
  
  # Note finale
 Le code simule le comportement de véhicules autonomes dans un environnement virtuel, avec des fonctionnalités telles que la recherche, l'évitement d'obstacles, la séparation entre les véhicules, etc. La simulation est interactive et utilise p5.js pour la visualisation.
+
+
+  # Explication concernent sketch.js
+Ce code semble être un sketch p5.js, une bibliothèque JavaScript dédiée à la création artistique et interactive. Le sketch consiste à créer des véhicules qui suivent une cible (la souris) ou les uns les autres selon un motif semblable à un serpent. Le code inclut des fonctionnalités telles que des curseurs pour contrôler différents paramètres, la possibilité d'ajouter des obstacles par clic de souris, et des commandes clavier pour manipuler le comportement des véhicules.
+
+# Curseurs de Contrôle :
+Trois curseurs __(maxSpeedSlider, maxForceSlider, distanceAheadSlider)__ sont créés pour permettre un réglage interactif des paramètres des véhicules.
+__maxSpeedSlider__ ajuste la vitesse maximale des véhicules.
+__maxForceSlider__ ajuste la force maximale qui peut être appliquée par les véhicules.
+distanceAheadSlider ajuste une distance spécifique à laquelle les véhicules peuvent réagir à la cible
+
+# Cible (Souris Rouge) :
+Une position __sourisRougePosition__ est mise à jour à chaque itération du dessin pour suivre la position actuelle de la souris.
+
+# Modes de Déplacement des Véhicules :
+
+Le code permet deux modes de déplacement, sélectionnés par la variable demo : "random" et "snake".
+En mode "random", chaque véhicule est indépendant et suit aléatoirement la cible.
+En mode "snake", les véhicules forment une séquence où le premier suit la cible, et les suivants suivent le précédent, créant ainsi un effet de serpent.
+
+# Obstacles :
+Des obstacles peuvent être ajoutés à la position de la souris lorsque le bouton de la souris est pressé. Chaque obstacle a une taille aléatoire.
+
+# Contrôle Clavier :
+Appuyer sur la touche "v" ajoute un nouveau véhicule à une position aléatoire.
+Appuyer sur la touche "l" sélectionne le mode "snake".
+Appuyer sur la touche "d" active ou désactive le mode de débogage.
+Appuyer sur la touche "w" active ou désactive le mode d'errance (wandering).
+Appuyer sur la touche "f" ajoute plusieur véhicule à une position aléatoire.
+
+# Gestion de Nombre de Véhicules :
+En appuyant sur la touche "f", 10 véhicules supplémentaires avec des propriétés spécifiques sont ajoutés, créant un effet intéressant à partir du bord gauche de l'écran.
+
+
+# Note:
+
+Dans la réalisation de ce jeux j'ai pris quelque notion à partir des exercices corrigé quand a fait durant la mission, j'ai utilisé aussi chatgpt mais il n'a pas beaucoup m'aider.
+
